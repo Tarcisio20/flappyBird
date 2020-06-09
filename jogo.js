@@ -1,5 +1,8 @@
 console.log('[Tarcisio Silva Dev] - Inicio do Flappy Bird')
 
+const som_Hit = new Audio()
+som_Hit.src = './efeitos/hit.wav'
+
 const sprites = new Image()
 sprites.src = './sprites.png'
 
@@ -160,7 +163,11 @@ function criaFlappyBird(){
         velocidade: 0,
         atualiza(){
             if(fazColisao(flappyBird, chao)){
-                mudaParaTela(Telas.INICIO)
+                som_Hit.play()
+                setTimeout(function(){
+                    mudaParaTela(Telas.INICIO)
+                }, 200)
+                return
             }
             flappyBird.velocidade = flappyBird.velocidade + flappyBird.gravidade
             flappyBird.y = flappyBird.y + flappyBird.velocidade
