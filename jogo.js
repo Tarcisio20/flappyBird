@@ -78,15 +78,18 @@ const Telas = {
         inicializa(){
            globais.flappyBird =  criaFlappyBird()
            globais.chao = criaChao()
+           globais.canos = criaCanos()
         },
         desenha(){   
             planoDeFundo.desenha()
-            globais.chao.desenha()
             globais.flappyBird.desenha()
-            mensagemGetReady.desenha()
+            globais.canos.desenha()
+            globais.chao.desenha()
+           // mensagemGetReady.desenha()
         },
         atualiza(){
             globais.chao.atualiza()
+            globais.canos.atualiza()
         },
         click(){
             mudaParaTela(Telas.JOGO)
@@ -218,6 +221,71 @@ function criaChao(){
         }
     }
     return chao
+}
+
+function criaCanos(){
+    // [CANOS]
+    const canos = {
+        largura: 52,
+        altura: 400,
+        chao: {
+            spriteX: 0,
+            spriteY: 169,
+        },
+        ceu: {
+            spriteX: 52,
+            spriteY: 169,
+        },
+        espaco: 80,
+        pares: [],
+        desenha(){
+            canos.pares.forEach(function(par){
+                const yRandon = par.y
+                const espacamentoEntreCanos = 80
+                
+                const canoCeuX = par.x
+                const canoCeuY = yRandon //yRandon
+
+
+
+                //[CANOS NO CEU]
+                contexto.drawImage(
+                    sprites,
+                    canos.ceu.spriteX, canos.ceu.spriteY,
+                    canos.largura, canos.altura,
+                    canoCeuX, canoCeuY,
+                    canos.largura, canos.altura
+                )
+    
+                // [CANO DO CHAO]
+                const canoChaoX = par.x 
+                const canoChaoY = canos.altura + espacamentoEntreCanos + yRandon //canos.altura + espacamentoEntreCanos + yRandon
+                contexto.drawImage(
+                    sprites,
+                    canos.chao.spriteX, canos.chao.spriteY,
+                    canos.largura, canos.altura,
+                    canoChaoX, canoChaoY,
+                    canos.largura, canos.altura
+                )
+            })
+
+        },
+        atualiza(){
+            const passou100Frames = frames % 100 === 0
+            if(passou100Frames){
+                canos.pares.push({ x: canvas.width,y: -150 * (Math.random() + 1)})
+            }
+
+            canos.pares.forEach(function(par){
+                par.x = par.x - 2
+
+                if(par.x + canos.largura <= 0){
+                    canos.pares.shift()
+                }
+{}            })
+        },
+    }
+    return canos
 }
 
 window.addEventListener('click', function(){
