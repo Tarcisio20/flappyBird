@@ -88,6 +88,7 @@ const flappyBird = {
     altura: 24,
     x: 10,
     y: 50,
+    pulo: 4.6,
     gravidade: 0.25,
     velocidade: 0,
     atualiza(){
@@ -103,6 +104,9 @@ const flappyBird = {
             flappyBird.x, flappyBird.y, // Onde será desenhado no canvas
             flappyBird.largura, flappyBird.altura, // Tamanho que será desenhado no canvas
         )
+    },
+    pula(){
+        flappyBird.velocidade = - flappyBird.pulo
     }
 }
 
@@ -134,6 +138,9 @@ const Telas = {
             planoDeFundo.desenha()
             chao.desenha()
             flappyBird.desenha()
+        },
+        click(){
+            flappyBird.pula()
         },
         atualiza(){
             flappyBird.atualiza()
