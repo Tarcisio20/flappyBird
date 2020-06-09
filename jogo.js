@@ -238,7 +238,7 @@ function criaCanos(){
             spriteX: 52,
             spriteY: 169,
         },
-        espaco: 80,
+        espaco: 100,
         pares: [],
         desenha(){
             canos.pares.forEach(function(par){
@@ -296,7 +296,10 @@ function criaCanos(){
             const cabecaDoFlappy = globais.flappyBird.y 
             const peDoPlappy = globais.flappyBird.y + globais.flappyBird.altura
             if(globais.flappyBird.x >= par.x){
-                mudaParaTela(Telas.INICIO)
+                som_Hit.play()
+                setTimeout(function(){
+                    mudaParaTela(Telas.INICIO)
+                }, 200)
                 if(cabecaDoFlappy <= par.canoCeu.y){
                     return true
                 }
