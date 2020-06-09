@@ -85,7 +85,7 @@ const Telas = {
             globais.flappyBird.desenha()
            
             globais.chao.desenha()
-           // mensagemGetReady.desenha()
+            mensagemGetReady.desenha()
         },
         atualiza(){
             globais.chao.atualiza()
@@ -296,7 +296,7 @@ function criaCanos(){
             const cabecaDoFlappy = globais.flappyBird.y 
             const peDoPlappy = globais.flappyBird.y + globais.flappyBird.altura
             if(globais.flappyBird.x >= par.x){
-                console.log('Bateu')
+                mudaParaTela(Telas.INICIO)
                 if(cabecaDoFlappy <= par.canoCeu.y){
                     return true
                 }
