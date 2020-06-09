@@ -80,50 +80,30 @@ const mensagemGetReady = {
     }
 }
 
-// [OBJETO FLAPPY BOARD]
-const flappyBird = {
-    spriteX: 0,
-    spriteY: 0,
-    largura: 33,
-    altura: 24,
-    x: 10,
-    y: 50,
-    pulo: 4.6,
-    gravidade: 0.25,
-    velocidade: 0,
-    atualiza(){
-        flappyBird.velocidade = flappyBird.velocidade + flappyBird.gravidade
-        flappyBird.y = flappyBird.y + flappyBird.velocidade
-    },
-    desenha(){
-        // desenha na tela
-        contexto.drawImage(
-            sprites, // Imagem base
-            flappyBird.spriteX, flappyBird.spriteY,  //Pegado da img que vamos pegar X | Y
-            flappyBird.largura, flappyBird.altura, // Tamanho do sprite que sera desenhado Altura | Largura
-            flappyBird.x, flappyBird.y, // Onde será desenhado no canvas
-            flappyBird.largura, flappyBird.altura, // Tamanho que será desenhado no canvas
-        )
-    },
-    pula(){
-        flappyBird.velocidade = - flappyBird.pulo
-    }
-}
+
 
 //
 // [    TELAS   ]
 //
+const globais = {}
 let telaAtiva = {}
 function mudaParaTela(novaTela){
     telaAtiva = novaTela
+
+    if(telaAtiva.inicializa){
+        telaAtiva.inicializa()
+    }
 }
 
 const Telas = {
     INICIO: {
+        inicializa(){
+           globais.flappyBird =  criaFlappyBird()
+        },
         desenha(){   
             planoDeFundo.desenha()
             chao.desenha()
-            flappyBird.desenha()
+            globais.flappyBird.desenha()
             mensagemGetReady.desenha()
         },
         atualiza(){
@@ -137,13 +117,13 @@ const Telas = {
         desenha(){
             planoDeFundo.desenha()
             chao.desenha()
-            flappyBird.desenha()
+            globais.flappyBird.desenha()
         },
         click(){
-            flappyBird.pula()
+            globais.flappyBird.pula()
         },
         atualiza(){
-            flappyBird.atualiza()
+            globais.flappyBird.atualiza()
         }
     }
 }
@@ -154,6 +134,52 @@ function loop(){
     telaAtiva.desenha()
     telaAtiva.atualiza()
     requestAnimationFrame(loop)
+}
+
+function fazColisao(flappyBird, chao){
+    const flappyBirdY = flappyBird.y + flappyBird.altura
+    const chaoY = chao.y
+
+    if(flappyBirdY >= chaoY){
+        return true
+    }
+    return false
+}
+
+function criaFlappyBird(){
+    // [OBJETO FLAPPY BOARD]
+    const flappyBird = {
+        spriteX: 0,
+        spriteY: 0,
+        largura: 33,
+        altura: 24,
+        x: 10,
+        y: 50,
+        pulo: 4.6,
+        gravidade: 0.25,
+        velocidade: 0,
+        atualiza(){
+            if(fazColisao(flappyBird, chao)){
+                mudaParaTela(Telas.INICIO)
+            }
+            flappyBird.velocidade = flappyBird.velocidade + flappyBird.gravidade
+            flappyBird.y = flappyBird.y + flappyBird.velocidade
+        },
+        desenha(){
+            // desenha na tela
+            contexto.drawImage(
+                sprites, // Imagem base
+                flappyBird.spriteX, flappyBird.spriteY,  //Pegado da img que vamos pegar X | Y
+                flappyBird.largura, flappyBird.altura, // Tamanho do sprite que sera desenhado Altura | Largura
+                flappyBird.x, flappyBird.y, // Onde será desenhado no canvas
+                flappyBird.largura, flappyBird.altura, // Tamanho que será desenhado no canvas
+            )
+        },
+        pula(){
+            flappyBird.velocidade = - flappyBird.pulo
+        }
+    }
+    return flappyBird
 }
 
 window.addEventListener('click', function(){
